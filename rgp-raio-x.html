@@ -581,7 +581,7 @@ async function enviar() {
       })
     });
     const data = await res.json();
-    if (!data.success) throw new Error(data.message);
+    if (!data.success) throw new Error(JSON.stringify(data));
     document.getElementById('sending').style.display = 'none';
     document.getElementById('success').style.display  = 'block';
   } catch(err) {
@@ -589,6 +589,7 @@ async function enviar() {
     document.getElementById('sending').style.display = 'none';
     document.getElementById('step4').classList.add('active');
     document.getElementById('globalErr').style.display = 'block';
+    document.getElementById('globalErr').textContent = 'Erro: ' + err.message;
     window.scrollTo({ top: document.getElementById('formulario').offsetTop - 80, behavior: 'smooth' });
   }
 }
