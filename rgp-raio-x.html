@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raio-X Comercial · RGP</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --navy:     #0F2336;
+    --electric: #1E7BE8;
+    --elec-glow:#1E7BE818;
+    --white:    #FFFFFF;
+    --gray:     #7A8FA6;
+    --danger:   #E84040;
+    --sep:      rgba(255,255,255,.08);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(30,123,232,.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(30,123,232,.06) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none; z-index: 0;
+  }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(15,35,54,.92);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(30,123,232,.15);
+  }
+  .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; }
+  .logo span { color: var(--electric); }
+  .nav-tag {
+    font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--gray); border: 1px solid rgba(30,123,232,.3); padding: 5px 12px; border-radius: 20px;
+  }
+
+  .hero {
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 120px 24px 80px;
+  }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--electric); background: var(--elec-glow);
+    border: 1px solid rgba(30,123,232,.3); padding: 7px 16px; border-radius: 20px;
+    margin-bottom: 32px; animation: fadeUp .6s ease both;
+  }
+  .eyebrow::before {
+    content: ''; width: 6px; height: 6px;
+    background: var(--electric); border-radius: 50%; animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.7)} }
+  h1 {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(34px,7vw,70px); line-height: 1.0;
+    letter-spacing: -.02em; max-width: 820px;
+    animation: fadeUp .7s .1s ease both;
+  }
+  h1 em { font-style: normal; color: var(--electric); }
+  .hero-sub {
+    margin-top: 22px; font-size: clamp(14px,2vw,18px); font-weight: 300; line-height: 1.7;
+    color: rgba(255,255,255,.55); max-width: 520px; animation: fadeUp .7s .2s ease both;
+  }
+  .hero-cta {
+    margin-top: 44px; display: inline-flex; align-items: center; gap: 10px;
+    background: var(--electric); color: #fff; font-weight: 600; font-size: 15px;
+    padding: 16px 32px; border-radius: 6px; text-decoration: none;
+    transition: transform .2s, box-shadow .2s; animation: fadeUp .7s .3s ease both;
+  }
+  .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(30,123,232,.4); }
+  .hero-stats { margin-top: 64px; display: flex; gap: 52px; animation: fadeUp .7s .4s ease both; }
+  .stat { text-align: center; }
+  .stat-num { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 30px; color: var(--electric); }
+  .stat-label { font-size: 12px; color: var(--gray); margin-top: 3px; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+  #formulario { position: relative; z-index: 1; padding: 80px 24px 120px; }
+  .form-wrap { max-width: 680px; margin: 0 auto; }
+  .sec-label { font-size: 11px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--electric); margin-bottom: 10px; }
+  .sec-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: clamp(22px,4vw,36px); line-height: 1.1; margin-bottom: 12px; }
+  .sec-desc { font-size: 14px; color: rgba(255,255,255,.45); line-height: 1.7; margin-bottom: 36px; }
+
+  .progress-wrap { margin-bottom: 36px; }
+  .progress-info { display: flex; justify-content: space-between; font-size: 12px; color: var(--gray); margin-bottom: 8px; }
+  .progress-bar { height: 3px; background: rgba(255,255,255,.08); border-radius: 2px; }
+  .progress-fill { height: 100%; border-radius: 2px; background: var(--electric); transition: width .5s ease; }
+
+  .block-label {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 11px;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--electric);
+    margin: 28px 0 14px; display: flex; align-items: center; gap: 10px;
+  }
+  .block-label::after { content:''; flex:1; height:1px; background: rgba(30,123,232,.2); }
+
+  .step { display: none; animation: fadeUp .35s ease both; }
+  .step.active { display: block; }
+
+  .field { margin-bottom: 16px; }
+  .field label { display: block; font-size: 12px; color: var(--gray); margin-bottom: 6px; }
+  .field label .req { color: var(--electric); }
+  .field input, .field select, .field textarea {
+    width: 100%; background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.1); border-radius: 8px;
+    padding: 12px 14px; color: #fff;
+    font-family: 'DM Sans', sans-serif; font-size: 14px;
+    outline: none; transition: border-color .2s; -webkit-appearance: none;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--electric); }
+  .field input::placeholder, .field textarea::placeholder { color: rgba(122,143,166,.7); }
+  .field select option { background: #1a3450; }
+  .field textarea { resize: vertical; min-height: 90px; }
+  .field-error { font-size: 12px; color: #ff7070; margin-top: 5px; display: none; }
+
+  .opts { display: flex; flex-direction: column; gap: 8px; }
+  .opt {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 14px; border-radius: 8px;
+    border: 1px solid rgba(255,255,255,.08);
+    background: rgba(255,255,255,.02);
+    cursor: pointer; transition: all .18s; font-size: 14px; user-select: none;
+  }
+  .opt:hover { border-color: rgba(30,123,232,.5); background: var(--elec-glow); }
+  .opt.sel  { border-color: var(--electric); background: rgba(30,123,232,.1); }
+  .opt-box {
+    width: 20px; height: 20px; border-radius: 5px;
+    border: 1.5px solid rgba(255,255,255,.2); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .18s;
+  }
+  .opt.radio .opt-box { border-radius: 50%; }
+  .opt.sel .opt-box { background: var(--electric); border-color: var(--electric); }
+  .opt.sel .opt-box::after { content:''; display:block; }
+  .opt.checkbox.sel .opt-box::after { content:''; width:5px; height:9px; border:2px solid #fff; border-top:none; border-left:none; transform: rotate(40deg) translate(1px,-1px); }
+  .opt.radio.sel .opt-box::after { width:8px; height:8px; background:#fff; border-radius:50%; }
+
+  .q-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 32px; }
+  .btn-back {
+    background: none; border: 1px solid rgba(255,255,255,.1); color: var(--gray);
+    font-size: 14px; padding: 10px 20px; border-radius: 6px; cursor: pointer;
+    transition: all .2s; font-family: 'DM Sans', sans-serif;
+  }
+  .btn-back:hover { border-color: rgba(255,255,255,.3); color: #fff; }
+  .btn-next {
+    background: var(--electric); border: none; color: #fff;
+    font-size: 14px; font-weight: 600; padding: 12px 28px; border-radius: 6px;
+    cursor: pointer; transition: all .2s; font-family: 'DM Sans', sans-serif;
+  }
+  .btn-next:hover { box-shadow: 0 6px 24px rgba(30,123,232,.4); transform: translateY(-1px); }
+
+  #sending { display: none; text-align: center; padding: 60px 20px; }
+  .loader { width: 52px; height: 52px; border-radius: 50%; border: 3px solid rgba(30,123,232,.2); border-top-color: var(--electric); animation: spin 1s linear infinite; margin: 0 auto 22px; }
+  @keyframes spin { to{transform:rotate(360deg)} }
+  .sending-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 20px; margin-bottom: 8px; }
+  .sending-sub { color: var(--gray); font-size: 14px; }
+
+  #success { display: none; text-align: center; padding: 60px 20px; }
+  .success-icon {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: rgba(30,123,232,.12); border: 2px solid var(--electric);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; margin: 0 auto 24px;
+  }
+  .success-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 26px; margin-bottom: 12px; }
+  .success-sub { color: rgba(255,255,255,.55); font-size: 15px; line-height: 1.75; max-width: 400px; margin: 0 auto; }
+
+  .global-err {
+    background: rgba(232,64,64,.08); border: 1px solid rgba(232,64,64,.3);
+    border-radius: 8px; padding: 14px 18px; color: #ff8080; font-size: 14px;
+    margin-top: 16px; display: none;
+  }
+
+  @media(max-width:600px){
+    nav{padding:16px 20px;}
+    .hero-stats{gap:28px;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">R<span>GP</span></div>
+  <div class="nav-tag">Engenheiro de Receita</div>
+</nav>
+
+<section class="hero">
+  <div class="eyebrow">Diagnostico Gratuito &middot; RGP</div>
+  <h1>Seu processo de aquisicao<br>tem um <em>gargalo</em>.<br>A gente descobre qual e.</h1>
+  <p class="hero-sub">Preencha o formulario abaixo. Nossa equipe analisa suas respostas e entra em contato com um diagnostico personalizado — sem custo.</p>
+  <a href="#formulario" class="hero-cta">
+    Iniciar Diagnostico Gratuito
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </a>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">20</div><div class="stat-label">Perguntas</div></div>
+    <div class="stat"><div class="stat-num">5min</div><div class="stat-label">Duracao</div></div>
+    <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Gratuito</div></div>
+  </div>
+</section>
+
+<section id="formulario">
+  <div class="form-wrap">
+    <div class="sec-label">Raio-X Comercial · RGP</div>
+    <h2 class="sec-title">Diagnostico da sua operacao</h2>
+    <p class="sec-desc">Quanto mais detalhe voce fornecer, mais precisa sera nossa analise. Suas respostas ficam confidenciais.</p>
+
+    <div class="progress-wrap">
+      <div class="progress-info">
+        <span id="stepLabel">Etapa 1 de 4 &mdash; Dados Gerais</span>
+        <span id="stepPct">25%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:25%"></div></div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="step active" id="step1">
+      <div class="block-label">Dados Gerais</div>
+
+      <div class="field">
+        <label>Qual o seu nome? <span class="req">*</span></label>
+        <input type="text" id="f_nome" placeholder="Ex: Carlos Mendes">
+        <div class="field-error" id="e_nome">Campo obrigatorio</div>
+      </div>
+      <div class="field">
+        <label>Qual o nome da sua empresa? <span class="req">*</span></label>
+        <input type="text" id="f_empresa" placeholder="Ex: Studio Pilates Saude">
+        <div class="field-error" id="e_empresa">Campo obrigatorio</div>
+      </div>
+      <div class="field">
+        <label>Qual o seu e-mail? <span class="req">*</span></label>
+        <input type="email" id="f_email" placeholder="contato@suaempresa.com.br">
+        <div class="field-error" id="e_email">Informe um e-mail valido</div>
+      </div>
+      <div class="field">
+        <label>Qual o seu WhatsApp? <span class="req">*</span></label>
+        <input type="tel" id="f_whatsapp" placeholder="(21) 99999-9999">
+        <div class="field-error" id="e_whatsapp">Campo obrigatorio</div>
+      </div>
+
+      <div class="q-nav">
+        <span></span>
+        <button class="btn-next" onclick="go(1,2)">Proximo &rarr;</button>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step" id="step2">
+      <div class="block-label">Contexto do Negocio</div>
+
+      <div class="field">
+        <label>Em qual segmento sua empresa atua? <span class="req">*</span></label>
+        <input type="text" id="f_segmento" placeholder="Ex: Saude, Advocacia, E-commerce, Educacao...">
+        <div class="field-error" id="e_segmento">Campo obrigatorio</div>
+      </div>
+      <div class="field">
+        <label>Ha quanto tempo sua empresa existe? <span class="req">*</span></label>
+        <select id="f_tempo">
+          <option value="">Selecione...</option>
+          <option>Menos de 1 ano</option>
+          <option>Entre 1 e 3 anos</option>
+          <option>Entre 3 e 5 anos</option>
+          <option>Mais de 5 anos</option>
+        </select>
+        <div class="field-error" id="e_tempo">Selecione uma opcao</div>
+      </div>
+      <div class="field">
+        <label>Qual o faturamento medio mensal atual?</label>
+        <div class="opts" id="g_faturamento">
+          <div class="opt radio" onclick="radio('g_faturamento',this,'Ate R$ 10.000')"><div class="opt-box"></div>Ate R$ 10.000</div>
+          <div class="opt radio" onclick="radio('g_faturamento',this,'Entre R$ 10.000 e R$ 50.000')"><div class="opt-box"></div>Entre R$ 10.000 e R$ 50.000</div>
+          <div class="opt radio" onclick="radio('g_faturamento',this,'Entre R$ 50.000 e R$ 200.000')"><div class="opt-box"></div>Entre R$ 50.000 e R$ 200.000</div>
+          <div class="opt radio" onclick="radio('g_faturamento',this,'Acima de R$ 200.000')"><div class="opt-box"></div>Acima de R$ 200.000</div>
+          <div class="opt radio" onclick="radio('g_faturamento',this,'Prefiro nao informar agora')"><div class="opt-box"></div>Prefiro nao informar agora</div>
+        </div>
+      </div>
+
+      <div class="q-nav">
+        <button class="btn-back" onclick="go(2,1)">&larr; Voltar</button>
+        <button class="btn-next" onclick="go(2,3)">Proximo &rarr;</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step" id="step3">
+      <div class="block-label">Situacao Atual</div>
+
+      <div class="field">
+        <label>Qual o principal desafio da sua empresa hoje? <span class="req">*</span></label>
+        <textarea id="f_desafio" placeholder="Descreva com detalhe o maior problema que voce enfrenta na operacao..."></textarea>
+        <div class="field-error" id="e_desafio">Campo obrigatorio</div>
+      </div>
+
+      <div class="field">
+        <label>De onde vem a maioria dos seus clientes? <span style="color:var(--gray)">(pode marcar mais de uma)</span></label>
+        <div class="opts" id="g_origem">
+          <div class="opt checkbox" onclick="check(this)"><div class="opt-box"></div>Indicacao (Boca a boca)</div>
+          <div class="opt checkbox" onclick="check(this)"><div class="opt-box"></div>Prospeccao Ativa (Eu vou atras do cliente)</div>
+          <div class="opt checkbox" onclick="check(this)"><div class="opt-box"></div>Anuncios Pagos (Google, Meta, etc.)</div>
+          <div class="opt checkbox" onclick="check(this)"><div class="opt-box"></div>Redes Sociais (Organico)</div>
+          <div class="opt checkbox" onclick="check(this)"><div class="opt-box"></div>Site / Blog (SEO)</div>
+          <div class="opt checkbox" onclick="check(this)"><div class="opt-box"></div>Outro</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Voce possui um processo de vendas definido?</label>
+        <div class="opts" id="g_processo">
+          <div class="opt radio" onclick="radio('g_processo',this,'Sim, e bem estruturado e a equipe segue')"><div class="opt-box"></div>Sim, e bem estruturado e a equipe segue</div>
+          <div class="opt radio" onclick="radio('g_processo',this,'Mais ou menos, temos uma ideia mas nao e formalizado')"><div class="opt-box"></div>Mais ou menos, temos uma ideia mas nao e formalizado</div>
+          <div class="opt radio" onclick="radio('g_processo',this,'Nao, e desorganizado / cada um faz de um jeito')"><div class="opt-box"></div>Nao, e desorganizado / cada um faz de um jeito</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Quais ferramentas voce usa para gerenciar vendas e marketing? <span style="color:var(--gray)">(pode marcar mais de uma)</span></label>
+        <div class="opts" id="g_ferramentas">
+          <div class="opt checkbox" onclick="check(this)"><div class="opt-box"></div>Nenhuma / Uso planilhas</div>
+          <div class="opt checkbox" onclick="check(this)"><div class="opt-box"></div>Um sistema de CRM</div>
+          <div class="opt checkbox" onclick="check(this)"><div class="opt-box"></div>Ferramentas de disparo de e-mail</div>
+          <div class="opt checkbox" onclick="check(this)"><div class="opt-box"></div>Outro</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Qual e o seu maior gargalo hoje?</label>
+        <div class="opts" id="g_gargalo">
+          <div class="opt radio" onclick="radio('g_gargalo',this,'Nao consigo gerar leads suficientes')"><div class="opt-box"></div>Nao consigo gerar leads (interessados) suficientes</div>
+          <div class="opt radio" onclick="radio('g_gargalo',this,'Gero leads, mas nao sao qualificados')"><div class="opt-box"></div>Gero leads, mas eles nao sao qualificados</div>
+          <div class="opt radio" onclick="radio('g_gargalo',this,'Meus leads nao respondem ou esfriamrapido')"><div class="opt-box"></div>Meus leads nao respondem ou "esfriaram" rapido</div>
+          <div class="opt radio" onclick="radio('g_gargalo',this,'Minha taxa de fechamento e baixa')"><div class="opt-box"></div>Minha taxa de fechamento (converter lead em cliente) e baixa</div>
+          <div class="opt radio" onclick="radio('g_gargalo',this,'Nao tenho tempo/braco para prospectar')"><div class="opt-box"></div>Nao tenho tempo/braco para prospectar</div>
+          <div class="opt radio" onclick="radio('g_gargalo',this,'Meu marketing digital nao traz retorno')"><div class="opt-box"></div>Meu marketing digital nao traz retorno</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Qual o seu principal objetivo de negocio para os proximos 6 meses? <span class="req">*</span></label>
+        <textarea id="f_objetivo" placeholder="Ex: Dobrar o faturamento, abrir nova unidade, estruturar equipe de vendas..."></textarea>
+        <div class="field-error" id="e_objetivo">Campo obrigatorio</div>
+      </div>
+
+      <div class="q-nav">
+        <button class="btn-back" onclick="go(3,2)">&larr; Voltar</button>
+        <button class="btn-next" onclick="go(3,4)">Proximo &rarr;</button>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step" id="step4">
+      <div class="block-label">Operacao e Recursos</div>
+
+      <div class="field">
+        <label>Para qual area voce quer que o foco da analise gratuita seja?</label>
+        <div class="opts" id="g_foco">
+          <div class="opt radio" onclick="radio('g_foco',this,'Marketing Digital (Geracao de Leads, Presenca Online)')"><div class="opt-box"></div>Marketing Digital (Geracao de Leads, Presenca Online)</div>
+          <div class="opt radio" onclick="radio('g_foco',this,'Processo Comercial (Como vender mais para os leads atuais)')"><div class="opt-box"></div>Processo Comercial (Como vender mais para os leads atuais)</div>
+          <div class="opt radio" onclick="radio('g_foco',this,'Ambos (Visao geral da conexao Marketing + Vendas)')"><div class="opt-box"></div>Ambos (Visao geral da conexao Marketing + Vendas)</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>O que consome mais tempo da sua equipe de vendas (ou do seu tempo)?</label>
+        <div class="opts" id="g_tempo_eq">
+          <div class="opt radio" onclick="radio('g_tempo_eq',this,'Atender clientes novos (explicar preco, tirar duvidas basicas)')"><div class="opt-box"></div>Atender clientes novos (explicar preco, tirar duvidas basicas)</div>
+          <div class="opt radio" onclick="radio('g_tempo_eq',this,'Fazer propostas e orcamentos manualmente')"><div class="opt-box"></div>Fazer propostas e orcamentos manualmente</div>
+          <div class="opt radio" onclick="radio('g_tempo_eq',this,'Cobrar clientes que sumiram (Follow-up)')"><div class="opt-box"></div>Cobrar clientes que sumiram (Follow-up)</div>
+          <div class="opt radio" onclick="radio('g_tempo_eq',this,'Organizar agenda e planilhas')"><div class="opt-box"></div>Organizar agenda e planilhas</div>
+          <div class="opt radio" onclick="radio('g_tempo_eq',this,'Resolver problemas administrativos/pos-venda')"><div class="opt-box"></div>Resolver problemas administrativos/pos-venda</div>
+          <div class="opt radio" onclick="radio('g_tempo_eq',this,'Outro')"><div class="opt-box"></div>Outro</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Com que frequencia voce perde vendas por demorar a responder ou esquecer de retornar?</label>
+        <div class="opts" id="g_perda">
+          <div class="opt radio" onclick="radio('g_perda',this,'Raramente, somos muito organizados')"><div class="opt-box"></div>Raramente, somos muito organizados</div>
+          <div class="opt radio" onclick="radio('g_perda',this,'As vezes, quando o movimento aumenta muito')"><div class="opt-box"></div>As vezes, quando o movimento aumenta muito</div>
+          <div class="opt radio" onclick="radio('g_perda',this,'Frequentemente, sinto que deixo dinheiro na mesa por falta de braco/tempo')"><div class="opt-box"></div>Frequentemente, sinto que deixo dinheiro na mesa</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Como voces lidam com perguntas repetitivas (preco, localizacao, horario)?</label>
+        <div class="opts" id="g_rep">
+          <div class="opt radio" onclick="radio('g_rep',this,'Respondemos manualmente, uma a uma, toda vez')"><div class="opt-box"></div>Respondemos manualmente, uma a uma, toda vez</div>
+          <div class="opt radio" onclick="radio('g_rep',this,'Temos mensagens salvas / copia e cola')"><div class="opt-box"></div>Temos mensagens salvas / copia e cola</div>
+          <div class="opt radio" onclick="radio('g_rep',this,'Usamos automacao (chatbot/respostas automaticas)')"><div class="opt-box"></div>Usamos automacao (chatbot/respostas automaticas)</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Voce possui lista de contatos de clientes antigos ou pessoas que ja pediram orcamento?</label>
+        <div class="opts" id="g_lista">
+          <div class="opt radio" onclick="radio('g_lista',this,'Sim, tenho uma lista organizada (e-mails/telefones)')"><div class="opt-box"></div>Sim, tenho uma lista organizada (e-mails/telefones)</div>
+          <div class="opt radio" onclick="radio('g_lista',this,'Tenho, mas esta tudo misturado/desorganizado')"><div class="opt-box"></div>Tenho, mas esta tudo misturado/desorganizado</div>
+          <div class="opt radio" onclick="radio('g_lista',this,'Nao, nao guardamos historico de quem nao comprou')"><div class="opt-box"></div>Nao, nao guardamos historico de quem nao comprou</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Quais materiais visuais da empresa voce ja possui? <span style="color:var(--gray)">(pode marcar mais de uma)</span></label>
+        <div class="opts" id="g_materiais">
+          <div class="opt checkbox" onclick="check(this)"><div class="opt-box"></div>Logotipo em boa qualidade</div>
+          <div class="opt checkbox" onclick="check(this)"><div class="opt-box"></div>Fotos profissionais dos produtos/servicos/ambiente</div>
+          <div class="opt checkbox" onclick="check(this)"><div class="opt-box"></div>Videos explicativos ou de depoimentos</div>
+          <div class="opt checkbox" onclick="check(this)"><div class="opt-box"></div>Nao tenho materiais profissionais, usamos fotos de celular amadoras</div>
+        </div>
+      </div>
+
+      <div class="global-err" id="globalErr">Erro ao enviar. Tente novamente em instantes.</div>
+
+      <div class="q-nav">
+        <button class="btn-back" onclick="go(4,3)">&larr; Voltar</button>
+        <button class="btn-next" onclick="enviar()">Enviar Diagnostico &rarr;</button>
+      </div>
+    </div>
+
+    <div id="sending">
+      <div class="loader"></div>
+      <div class="sending-title">Enviando suas respostas...</div>
+      <div class="sending-sub">Aguarde um instante</div>
+    </div>
+
+    <div id="success">
+      <div class="success-icon">&#10003;</div>
+      <div class="success-title">Diagnostico recebido!</div>
+      <p class="success-sub">Suas respostas foram enviadas com sucesso.<br>Nossa equipe vai analisar seu perfil e entrar em contato pelo WhatsApp ou e-mail que voce informou.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+// ─────────────────────────────────────────────
+// EMAILJS CONFIG
+const W3F_KEY = '3a2d4b10-ffc9-4685-958e-fea5ffbf9e97';
+
+const rv = {}; // radio values
+
+const steps = [
+  { label: 'Etapa 1 de 4 — Dados Gerais',        pct: '25%'  },
+  { label: 'Etapa 2 de 4 — Contexto do Negocio', pct: '50%'  },
+  { label: 'Etapa 3 de 4 — Situacao Atual',       pct: '75%'  },
+  { label: 'Etapa 4 de 4 — Operacao e Recursos',  pct: '100%' },
+];
+
+function updateProg(s) {
+  document.getElementById('stepLabel').textContent = steps[s-1].label;
+  document.getElementById('stepPct').textContent   = steps[s-1].pct;
+  document.getElementById('progressFill').style.width = steps[s-1].pct;
+}
+
+function go(from, to) {
+  if (to > from && !validate(from)) return;
+  document.getElementById('step'+from).classList.remove('active');
+  document.getElementById('step'+to).classList.add('active');
+  updateProg(to);
+  window.scrollTo({ top: document.getElementById('formulario').offsetTop - 80, behavior: 'smooth' });
+}
+
+function showE(id, show) {
+  const e = document.getElementById('e_'+id);
+  if (e) e.style.display = show ? 'block' : 'none';
+  const f = document.getElementById('f_'+id);
+  if (f) f.style.borderColor = show ? 'var(--danger)' : '';
+}
+
+function validate(s) {
+  let ok = true;
+  if (s === 1) {
+    const n = v('f_nome'), em = v('f_empresa'), e = v('f_email'), w = v('f_whatsapp');
+    if (!n)  { showE('nome',true);     ok=false; } else showE('nome',false);
+    if (!em) { showE('empresa',true);  ok=false; } else showE('empresa',false);
+    if (!e || !/\S+@\S+\.\S+/.test(e)) { showE('email',true); ok=false; } else showE('email',false);
+    if (!w)  { showE('whatsapp',true); ok=false; } else showE('whatsapp',false);
+  }
+  if (s === 2) {
+    const seg = v('f_segmento'), tmp = document.getElementById('f_tempo').value;
+    if (!seg) { showE('segmento',true); ok=false; } else showE('segmento',false);
+    if (!tmp) { showE('tempo',true);    ok=false; } else showE('tempo',false);
+  }
+  if (s === 3) {
+    const d = v('f_desafio'), o = v('f_objetivo');
+    if (!d) { showE('desafio',true);  ok=false; } else showE('desafio',false);
+    if (!o) { showE('objetivo',true); ok=false; } else showE('objetivo',false);
+  }
+  return ok;
+}
+
+function v(id) { return document.getElementById(id).value.trim(); }
+
+function radio(gid, el, val) {
+  document.querySelectorAll('#'+gid+' .opt').forEach(o => o.classList.remove('sel'));
+  el.classList.add('sel');
+  rv[gid] = val;
+}
+
+function check(el) { el.classList.toggle('sel'); }
+
+function getChecked(gid) {
+  const r = [];
+  document.querySelectorAll('#'+gid+' .opt.sel').forEach(o => r.push(o.textContent.trim()));
+  return r.length ? r.join(' | ') : 'Nao respondido';
+}
+
+function gr(gid) { return rv[gid] || 'Nao respondido'; }
+
+function buildMsg() {
+  return [
+    '================================================',
+    'RAIO-X COMERCIAL RGP — NOVO PREENCHIMENTO',
+    '================================================',
+    '',
+    '[ DADOS GERAIS ]',
+    'Nome:     ' + v('f_nome'),
+    'Empresa:  ' + v('f_empresa'),
+    'E-mail:   ' + v('f_email'),
+    'WhatsApp: ' + v('f_whatsapp'),
+    '',
+    '[ CONTEXTO DO NEGOCIO ]',
+    'Segmento:    ' + v('f_segmento'),
+    'Tempo:       ' + document.getElementById('f_tempo').value,
+    'Faturamento: ' + gr('g_faturamento'),
+    '',
+    '[ SITUACAO ATUAL ]',
+    'Principal desafio:',
+    v('f_desafio'),
+    '',
+    'Origem dos clientes: ' + getChecked('g_origem'),
+    'Processo de vendas:  ' + gr('g_processo'),
+    'Ferramentas:         ' + getChecked('g_ferramentas'),
+    'Maior gargalo:       ' + gr('g_gargalo'),
+    '',
+    'Objetivo 6 meses:',
+    v('f_objetivo'),
+    '',
+    '[ OPERACAO E RECURSOS ]',
+    'Foco da analise:           ' + gr('g_foco'),
+    'Maior consumo de tempo:    ' + gr('g_tempo_eq'),
+    'Perda de vendas por demora:' + gr('g_perda'),
+    'Perguntas repetitivas:     ' + gr('g_rep'),
+    'Lista de contatos:         ' + gr('g_lista'),
+    'Materiais visuais:         ' + getChecked('g_materiais'),
+    '',
+    '================================================',
+  ].join('\n');
+}
+
+async function enviar() {
+  document.getElementById('globalErr').style.display = 'none';
+  document.getElementById('step4').classList.remove('active');
+  document.getElementById('sending').style.display = 'block';
+  window.scrollTo({ top: document.getElementById('formulario').offsetTop - 80, behavior: 'smooth' });
+
+  try {
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        access_key: W3F_KEY,
+        subject:    'Novo Raio-X RGP: ' + v('f_empresa') + ' (' + v('f_nome') + ')',
+        name:       v('f_nome'),
+        email:      v('f_email'),
+        message:    buildMsg(),
+      })
+    });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.message);
+    document.getElementById('sending').style.display = 'none';
+    document.getElementById('success').style.display  = 'block';
+  } catch(err) {
+    console.error(err);
+    document.getElementById('sending').style.display = 'none';
+    document.getElementById('step4').classList.add('active');
+    document.getElementById('globalErr').style.display = 'block';
+    window.scrollTo({ top: document.getElementById('formulario').offsetTop - 80, behavior: 'smooth' });
+  }
+}
+</script>
+</body>
+</html>
